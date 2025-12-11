@@ -23,20 +23,24 @@ vim.keymap.set('n', '<leader>Q', function()
   vim.cmd("lopen")
 end, { desc = 'Show diagnostics from all buffers in location list' })
 
--- File Navigation with Telescope
-local telescope_builtin = require('telescope.builtin')                          -- Load Telescope's built-in pickers
-local telescope_ext = require('telescope').extensions                           -- Load Telescope's extensions
-local telescope_opts = { noremap = true }                                       -- Define common options for Telescope keymaps
-vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, telescope_opts) -- Map '<leader>ff' to find files
-vim.keymap.set('n', '<leader>fo', telescope_builtin.oldfiles, telescope_opts)   -- Map '<leader>fo' to find recently opened files
-vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, telescope_opts)    -- Map '<leader>fb' to list and switch between open buffers
-vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, telescope_opts)  -- Map '<leader>fg' to search text in all files
+-- File Navigation with Telescope (wrapped in pcall to allow startup without telescope installed)
+local telescope_ok, telescope = pcall(require, 'telescope')
+local telescope_builtin_ok, telescope_builtin = pcall(require, 'telescope.builtin')
 
--- Explorer
--- Map '<leader>e' to open the Telescope file browser at the current file's directory
-vim.keymap.set('n', '<leader>e',
-  function() telescope_ext.file_browser.file_browser { path = "%:p:h", select_buffer = true } end,
-  { noremap = true, silent = true })
+if telescope_ok and telescope_builtin_ok then
+  local telescope_ext = telescope.extensions                                      -- Load Telescope's extensions
+  local telescope_opts = { noremap = true }                                       -- Define common options for Telescope keymaps
+  vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, telescope_opts) -- Map '<leader>ff' to find files
+  vim.keymap.set('n', '<leader>fo', telescope_builtin.oldfiles, telescope_opts)   -- Map '<leader>fo' to find recently opened files
+  vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, telescope_opts)    -- Map '<leader>fb' to list and switch between open buffers
+  vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, telescope_opts)  -- Map '<leader>fg' to search text in all files
+
+  -- Explorer
+  -- Map '<leader>e' to open the Telescope file browser at the current file's directory
+  vim.keymap.set('n', '<leader>e',
+    function() telescope_ext.file_browser.file_browser { path = "%:p:h", select_buffer = true } end,
+    { noremap = true, silent = true })
+end
 
 -- Documentation
 vim.keymap.set('n', 'K', vim.lsp.buf.hover, { noremap = true, silent = true }) -- Map 'K' to show LSP hover documentation

@@ -1,54 +1,52 @@
-local on_attach_lsp = require('maps').on_attach_lsp
+local maps_ok, maps = pcall(require, 'maps')
+local on_attach_lsp = maps_ok and maps.on_attach_lsp or function() end
 
--- Safely require lspconfig
-local status, nvim_lsp = pcall(require, "lspconfig")
-if not status then return end
+-- Capabilities (with nvim-cmp integration if available)
+local cmp_lsp_ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+local capabilities = cmp_lsp_ok and cmp_nvim_lsp.default_capabilities() or vim.lsp.protocol.make_client_capabilities()
 
--- Common on_attach function for all LSP servers
-local on_attach = function(client, bufnr)
-  -- Enable omnifunc completion
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  -- Set up user mappings (from your maps module)
-  on_attach_lsp(bufnr)
+-- Common on_attach via LspAttach autocommand
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
+  callback = function(ev)
+    local bufnr = ev.buf
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
-  -- TypeScript: Register OrganizeImports command
-  if client.name == "tsserver" or client.name == "ts_ls" then
-    vim.api.nvim_buf_create_user_command(bufnr, "OrganizeImports", function()
-      vim.lsp.buf.execute_command({
-        command = "_typescript.organizeImports",
-        arguments = { vim.api.nvim_buf_get_name(0) },
-      })
-    end, { desc = "Organize Imports using TypeScript LSP" })
-  end
-end
+    -- Enable omnifunc completion
+    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
--- LSP flags and capabilities
-local lsp_flags = { debounce_text_changes = 150 }
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+    -- Set up user mappings (from your maps module)
+    on_attach_lsp(bufnr)
 
--- TypeScript/JavaScript LSP setup
-nvim_lsp.ts_ls.setup {
-  on_attach = on_attach,
+    -- TypeScript: Register OrganizeImports command
+    if client and (client.name == "ts_ls") then
+      vim.api.nvim_buf_create_user_command(bufnr, "OrganizeImports", function()
+        vim.lsp.buf.execute_command({
+          command = "_typescript.organizeImports",
+          arguments = { vim.api.nvim_buf_get_name(0) },
+        })
+      end, { desc = "Organize Imports using TypeScript LSP" })
+    end
+  end,
+})
+
+-- TypeScript/JavaScript LSP
+vim.lsp.config.ts_ls = {
   filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
   cmd = { vim.fn.stdpath("data") .. "/mason/bin/typescript-language-server", "--stdio" },
   capabilities = capabilities,
-  flags = lsp_flags,
-  root_dir = require('lspconfig.util').root_pattern('package.json', 'tsconfig.json', '.git'),
+  root_markers = { 'package.json', 'tsconfig.json', '.git' },
   single_file_support = false,
 }
 
--- Python LSP setup
-nvim_lsp.pyright.setup {
-  on_attach = on_attach,
+-- Python LSP
+vim.lsp.config.pyright = {
   capabilities = capabilities,
-  flags = lsp_flags,
 }
 
--- Lua LSP setup (for Neovim config/dev)
-nvim_lsp.lua_ls.setup {
-  on_attach = on_attach,
+-- Lua LSP (for Neovim config/dev)
+vim.lsp.config.lua_ls = {
   capabilities = capabilities,
-  flags = lsp_flags,
   settings = {
     Lua = {
       diagnostics = {
@@ -61,3 +59,8 @@ nvim_lsp.lua_ls.setup {
     },
   },
 }
+
+-- Enable the LSP servers
+vim.lsp.enable('ts_ls')
+vim.lsp.enable('pyright')
+vim.lsp.enable('lua_ls')
