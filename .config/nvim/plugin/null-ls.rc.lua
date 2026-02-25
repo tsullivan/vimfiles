@@ -31,27 +31,9 @@ null_ls.setup({
             cwd = find_kibana_root,
         }),
 
-        -- Prettier for formatting, respecting .prettierrc
-        null_ls.builtins.formatting.prettier.with({
-            filetypes = {
-                "javascript",
-                "javascriptreact",
-                "typescript",
-                "typescriptreact",
-                "vue",
-                "css",
-                "scss",
-                "less",
-                "html",
-                "json",
-                "jsonc", -- For tsconfig.json, etc.
-                "markdown",
-                "yaml",
-                "graphql",
-                "svelte",
-                "astro",
-            },
-            -- Use local `prettier` executable which will then automatically pick up .prettierrc
+        -- ESLint for formatting (applies --fix)
+        require("none-ls.formatting.eslint_d").with({
+            filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
             prefer_local = "node_modules/.bin",
             cwd = find_kibana_root,
         }),

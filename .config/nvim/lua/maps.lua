@@ -56,7 +56,7 @@ function M.on_attach_lsp(bufnr)
   vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, bufopts)      -- Map '<leader>gr' to find references
   vim.keymap.set('n', '<leader>gn', vim.lsp.buf.rename, bufopts)          -- Map '<leader>gn' to rename a symbol
   vim.keymap.set('n', '<leader>cf', vim.lsp.buf.code_action, bufopts)     -- Map '<leader>cf' to show available code actions
-  -- Map '<leader>fm' to format the current buffer using LSP formatting capabilities (e.g., Prettier via none-ls)
+  -- Map '<leader>fm' to format the current buffer using LSP formatting capabilities (e.g., ESLint via none-ls)
   vim.keymap.set('n', '<leader>fm', function()
     vim.lsp.buf.format { async = true }
   end, bufopts)
