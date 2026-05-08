@@ -54,6 +54,7 @@ return require('packer').startup(function(use)
   use { 'akinsho/bufferline.nvim' }                                                -- Displays open buffers as tabs
   use { 'nvim-lualine/lualine.nvim', requires = { 'arkav/lualine-lsp-progress' } } -- Fast and customizable status line
   use { 'arkav/lualine-lsp-progress' }                                             -- Lualine extension for LSP progress indication
+  use { 'petertriho/nvim-scrollbar' }                                              -- Adds a scrollbar to the editor
 
   ---
   -- Syntax & Treesitter
