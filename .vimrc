@@ -49,15 +49,14 @@ Plug 'romainl/Apprentice'
 
 Plug 'pangloss/vim-javascript'    " JavaScript support
 Plug 'leafgarland/typescript-vim' " TypeScript syntax
-Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
-set background=dark
 set termguicolors
-colorscheme gruvbox
-let g:airline_theme='gruvbox'
+" set background=dark
+" colorscheme gruvbox
+" let g:airline_theme='gruvbox'
 
 """""""""""""""""""""""""""""""""""""""""""""
 nmap <Plug>IgnoreMarkSearchNext <Plug>MarkSearchNext

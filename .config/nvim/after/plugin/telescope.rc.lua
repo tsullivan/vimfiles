@@ -1,4 +1,7 @@
-require('telescope').setup {
+local status, telescope = pcall(require, 'telescope')
+if not status then return end
+
+telescope.setup {
   defaults = {
     -- Default configuration for telescope goes here:
     -- config_key = value,
@@ -40,5 +43,5 @@ require('telescope').setup {
 }
 -- To get telescope-file-browser loaded and working with telescope,
 -- you need to call load_extension, somewhere after setup function:
-require("telescope").load_extension "file_browser"
-require("telescope").load_extension "fzf"
+telescope.load_extension "file_browser"
+telescope.load_extension "fzf"
