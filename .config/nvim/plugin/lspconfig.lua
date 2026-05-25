@@ -31,12 +31,23 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- TypeScript/JavaScript LSP
+-- "vue" is included so ts_ls attaches to .vue files and vue_ls (hybrid mode) can delegate
+-- TypeScript handling to it via @vue/typescript-plugin.
 vim.lsp.config.ts_ls = {
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+  filetypes = { "javascript", "typescript", "typescriptreact", "typescript.tsx", "vue" },
   cmd = { vim.fn.stdpath("data") .. "/mason/bin/typescript-language-server", "--stdio" },
   capabilities = capabilities,
   root_markers = { 'package.json', 'tsconfig.json', '.git' },
   single_file_support = false,
+  init_options = {
+    plugins = {
+      {
+        name = "@vue/typescript-plugin",
+        location = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/typescript-plugin",
+        languages = { "vue" },
+      },
+    },
+  },
 }
 
 -- Python LSP
@@ -60,7 +71,22 @@ vim.lsp.config.lua_ls = {
   },
 }
 
+-- Vue LSP (@vue/language-server, hybrid mode)
+-- vue_ls handles the template; ts_ls handles TypeScript in <script> via @vue/typescript-plugin.
+vim.lsp.config.vue_ls = {
+  filetypes = { "vue" },
+  cmd = { vim.fn.stdpath("data") .. "/mason/bin/vue-language-server", "--stdio" },
+  capabilities = capabilities,
+  root_markers = { "package.json", ".git" },
+  init_options = {
+    vue = {
+      hybridMode = true,
+    },
+  },
+}
+
 -- Enable the LSP servers
 vim.lsp.enable('ts_ls')
 vim.lsp.enable('pyright')
 vim.lsp.enable('lua_ls')
+vim.lsp.enable('vue_ls')

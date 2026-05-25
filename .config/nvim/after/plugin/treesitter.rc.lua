@@ -11,15 +11,15 @@ ts.setup {
     disable = {},
   },
   ensure_installed = {
+    "javascript",
+    "typescript",
     "tsx",
     "json",
     "yaml",
     "css",
     "html",
-    "lua"
-  },
-  autotag = {
-    enable = true,
+    "lua",
+    "vue"
   },
 }
 

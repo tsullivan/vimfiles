@@ -63,4 +63,5 @@ return require('packer').startup(function(use)
     'nvim-treesitter/nvim-treesitter', -- Next-gen syntax highlighting and parsing
     run = ':TSUpdate'                  -- Command to update Treesitter parsers after installation/update
   }
+  use { 'windwp/nvim-ts-autotag' }    -- Auto-close and rename HTML/JSX/Vue tags
 end)

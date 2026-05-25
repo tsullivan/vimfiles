@@ -1,0 +1,2 @@
+WRN 2025-12-05T13:35:28.423 ?.36263    server_start:199: Failed to start server: operation not permitted: /var/folders/hf/dnf5h6fs3t54hfy614cyfsbh0000gn/T/nvim.tsullivan/FcE3EW/nvim.36263.0
+WRN 2025-12-05T13:36:25.551 ?.36393    server_start:199: Failed to start server: operation not permitted: /var/folders/hf/dnf5h6fs3t54hfy614cyfsbh0000gn/T/nvim.tsullivan/108FGM/nvim.36393.0
