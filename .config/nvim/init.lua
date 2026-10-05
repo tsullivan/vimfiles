@@ -1,7 +1,7 @@
+require('plugins') -- maps.lua requires telescope, so plugins must be on the runtimepath first
 require('base')
 require('highlights')
 require('maps')
-require('plugins')
 
 -- Enable automatic reading of files changed outside Neovim
 vim.opt.autoread = true
