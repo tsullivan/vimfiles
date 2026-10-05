@@ -85,6 +85,13 @@ vim.lsp.config.vue_ls = {
   },
 }
 
+vim.api.nvim_create_user_command('LspRestart', function(opts)
+  local name = opts.args ~= '' and opts.args or nil
+  local clients = vim.lsp.get_clients({ bufnr = 0, name = name })
+  vim.lsp.stop_client(clients)
+  vim.cmd('e')
+end, { nargs = '?', desc = 'Restart LSP client(s) for current buffer' })
+
 -- Enable the LSP servers
 vim.lsp.enable('ts_ls')
 vim.lsp.enable('pyright')
