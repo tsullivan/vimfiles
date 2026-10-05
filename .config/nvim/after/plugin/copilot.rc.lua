@@ -1,5 +1,5 @@
 -- GitHub Copilot (github/copilot.vim)
--- Bail out cleanly if the plugin isn't available (e.g. before :PackerSync).
+-- Bail out cleanly if the plugin isn't available (e.g. before vim.pack has installed it).
 if vim.fn.exists(':Copilot') == 0 then return end
 
 ---------------------------------------------------------------------------

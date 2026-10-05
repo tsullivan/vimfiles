@@ -31,58 +31,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- TypeScript/JavaScript LSP
--- "vue" is included so ts_ls attaches to .vue files and vue_ls (hybrid mode) can delegate
--- TypeScript handling to it via @vue/typescript-plugin.
 vim.lsp.config.ts_ls = {
-  filetypes = { "javascript", "typescript", "typescriptreact", "typescript.tsx", "vue" },
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "typescript.tsx" },
   cmd = { vim.fn.stdpath("data") .. "/mason/bin/typescript-language-server", "--stdio" },
   capabilities = capabilities,
   root_markers = { 'package.json', 'tsconfig.json', '.git' },
   single_file_support = false,
-  init_options = {
-    plugins = {
-      {
-        name = "@vue/typescript-plugin",
-        location = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/typescript-plugin",
-        languages = { "vue" },
-      },
-    },
-  },
-}
-
--- Python LSP
-vim.lsp.config.pyright = {
-  capabilities = capabilities,
-}
-
--- Lua LSP (for Neovim config/dev)
-vim.lsp.config.lua_ls = {
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim' }, -- Recognize the `vim` global
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true), -- Neovim runtime
-        checkThirdParty = false,
-      },
-    },
-  },
-}
-
--- Vue LSP (@vue/language-server, hybrid mode)
--- vue_ls handles the template; ts_ls handles TypeScript in <script> via @vue/typescript-plugin.
-vim.lsp.config.vue_ls = {
-  filetypes = { "vue" },
-  cmd = { vim.fn.stdpath("data") .. "/mason/bin/vue-language-server", "--stdio" },
-  capabilities = capabilities,
-  root_markers = { "package.json", ".git" },
-  init_options = {
-    vue = {
-      hybridMode = true,
-    },
-  },
 }
 
 vim.api.nvim_create_user_command('LspRestart', function(opts)
@@ -94,6 +48,3 @@ end, { nargs = '?', desc = 'Restart LSP client(s) for current buffer' })
 
 -- Enable the LSP servers
 vim.lsp.enable('ts_ls')
-vim.lsp.enable('pyright')
-vim.lsp.enable('lua_ls')
-vim.lsp.enable('vue_ls')
